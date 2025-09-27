@@ -35,6 +35,8 @@ services:
   postgres:
     <<: *postgres-base
     profiles: ["production"]
+    expose:
+      - "5432"
 
   postgres-debug:
     <<: *postgres-base
@@ -48,6 +50,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    expose:
+      - "3000"
 
   app-debug:
     <<: *app-base
