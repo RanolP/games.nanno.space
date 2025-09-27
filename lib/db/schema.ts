@@ -1,11 +1,11 @@
+import { relations } from "drizzle-orm";
 import {
+  boolean,
   pgTable,
   text,
   timestamp,
   varchar,
-  boolean,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
 
 export const users = pgTable("user", {
   id: text("id").primaryKey(),
@@ -42,6 +42,15 @@ export const sessions = pgTable("session", {
   token: text("token").unique().notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+});
+
+export const verification = pgTable("verification", {
+  id: text("id").primaryKey(),
+  identifier: text("identifier").notNull(),
+  value: text("value").notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  createdAt: timestamp("createdAt").defaultNow(),
+  updatedAt: timestamp("updatedAt").defaultNow(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({

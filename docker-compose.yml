@@ -1,43 +1,62 @@
+x-app-base: &app-base
+  build:
+    context: .
+    dockerfile: Dockerfile
+  container_name: games-nanno-app
+  restart: unless-stopped
+  environment:
+    # Database connection for internal Docker network
+    DATABASE_URL: postgresql://postgres:postgres@postgres:5432/games_nanno_db
+    AUTH_SECRET: ${AUTH_SECRET:-please-change-this-secret-in-production}
+    AUTH_URL: ${AUTH_URL:-http://localhost:3000}
+    NEXT_PUBLIC_AUTH_URL: ${NEXT_PUBLIC_AUTH_URL:-http://localhost:3000}
+  networks:
+    - games-network
+
+x-postgres-base: &postgres-base
+  image: postgres:16-alpine
+  container_name: games-nanno-postgres
+  restart: unless-stopped
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: games_nanno_db
+  volumes:
+    - postgres_data:/var/lib/postgresql/data
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U postgres"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+  networks:
+    - games-network
+
 services:
   postgres:
-    image: postgres:16-alpine
-    container_name: games-nanno-postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: games_nanno_db
+    <<: *postgres-base
+    profiles: ["production"]
+
+  postgres-debug:
+    <<: *postgres-base
+    profiles: ["debug"]
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - games-network
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: games-nanno-app
-    restart: unless-stopped
-    ports:
-      - "8080:3000"
-    environment:
-      # Database connection for internal Docker network
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/games_nanno_db
-      AUTH_SECRET: ${AUTH_SECRET:-please-change-this-secret-in-production}
-      AUTH_URL: ${AUTH_URL:-http://localhost:3000}
-      NEXT_PUBLIC_AUTH_URL: ${NEXT_PUBLIC_AUTH_URL:-http://localhost:3000}
+    <<: *app-base
+    profiles: ["production"]
     depends_on:
       postgres:
         condition: service_healthy
-    networks:
-      - games-network
+
+  app-debug:
+    <<: *app-base
+    profiles: ["debug"]
+    depends_on:
+      postgres-debug:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
 
 networks:
   games-network:

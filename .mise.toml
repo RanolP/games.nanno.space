@@ -2,47 +2,80 @@
 node = "20"
 pnpm = "latest"
 
+[env]
+COMPOSE_PROFILES = "production"
+
 [tasks.up]
-description = "Start all Docker services"
-run = "docker-compose up -d"
+description = "Start all Docker services (production profile)"
+run = "docker-compose --profile production up -d"
+
+[tasks."up:debug"]
+description = "Start all Docker services with exposed ports (debug profile)"
+run = "docker-compose --profile debug up -d"
 
 [tasks.down]
 description = "Stop all Docker services"
-run = "docker-compose down"
+run = "docker-compose --profile production --profile debug down"
 
 [tasks.update]
-description = "Rebuild and restart Next.js container"
+description = "Rebuild and restart Next.js container (production)"
 run = """
-docker-compose stop app
-DOCKER_BUILDKIT=0 docker-compose build app
-docker-compose up -d app
+docker-compose --profile production stop app
+DOCKER_BUILDKIT=0 docker-compose --profile production build app
+docker-compose --profile production up -d app
+"""
+
+[tasks."update:debug"]
+description = "Rebuild and restart Next.js container (debug)"
+run = """
+docker-compose --profile debug stop app-debug
+DOCKER_BUILDKIT=0 docker-compose --profile debug build app-debug
+docker-compose --profile debug up -d app-debug
 """
 
 [tasks.logs]
 description = "Show logs from all services"
-run = "docker-compose logs -f"
+run = "docker-compose --profile production --profile debug logs -f"
 
 [tasks."logs:app"]
-description = "Show logs from Next.js app"
-run = "docker-compose logs -f app"
+description = "Show logs from Next.js app (production)"
+run = "docker-compose --profile production logs -f app"
+
+[tasks."logs:app:debug"]
+description = "Show logs from Next.js app (debug)"
+run = "docker-compose --profile debug logs -f app-debug"
 
 [tasks.build]
-description = "Build all Docker images"
-run = "DOCKER_BUILDKIT=0 docker-compose build"
+description = "Build all Docker images (production)"
+run = "DOCKER_BUILDKIT=0 docker-compose --profile production build"
+
+[tasks."build:debug"]
+description = "Build all Docker images (debug)"
+run = "DOCKER_BUILDKIT=0 docker-compose --profile debug build"
 
 [tasks.restart]
-description = "Restart all services"
-run = "docker-compose restart"
+description = "Restart all services (production)"
+run = "docker-compose --profile production restart"
+
+[tasks."restart:debug"]
+description = "Restart all services (debug)"
+run = "docker-compose --profile debug restart"
 
 [tasks."db:shell"]
-description = "Open PostgreSQL shell"
-run = "docker-compose exec postgres psql -U postgres -d games_nanno_db"
+description = "Open PostgreSQL shell (uses active profile)"
+run = """
+if docker ps | grep -q games-nanno-postgres; then
+  docker exec -it games-nanno-postgres psql -U postgres -d games_nanno_db
+else
+  echo "PostgreSQL container is not running. Start it with 'mise up' or 'mise up:debug'"
+fi
+"""
 
 [tasks.dev]
-description = "Start PostgreSQL in Docker and Next.js dev server locally"
+description = "Start PostgreSQL in Docker (debug) and Next.js dev server locally"
 run = """
-echo "Starting PostgreSQL database..."
-docker-compose up -d postgres
+echo "Starting PostgreSQL database with exposed port..."
+docker-compose --profile debug up -d postgres-debug
 echo "Waiting for database to be ready..."
 sleep 3
 echo "Starting Next.js development server..."
@@ -50,17 +83,21 @@ pnpm dev
 """
 
 [tasks."dev:db"]
-description = "Start only PostgreSQL in Docker for local development"
-run = "docker-compose up -d postgres"
+description = "Start only PostgreSQL in Docker for local development (debug with port)"
+run = "docker-compose --profile debug up -d postgres-debug"
 
 [tasks."dev:stop"]
 description = "Stop PostgreSQL container"
-run = "docker-compose stop postgres"
+run = "docker-compose --profile debug stop postgres-debug"
 
 [tasks."dev:logs"]
 description = "Show PostgreSQL logs for development"
-run = "docker-compose logs -f postgres"
+run = "docker-compose --profile debug logs -f postgres-debug"
 
 [tasks.clean]
 description = "Stop services and remove volumes (WARNING: destroys data)"
-run = "docker-compose down -v"
+run = "docker-compose --profile production --profile debug down -v"
+
+[tasks.ps]
+description = "Show running containers"
+run = "docker-compose --profile production --profile debug ps"

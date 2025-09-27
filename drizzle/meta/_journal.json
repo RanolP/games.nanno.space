@@ -8,6 +8,13 @@
       "when": 1758986575416,
       "tag": "0000_needy_gunslinger",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1758992339173,
+      "tag": "0001_fantastic_cannonball",
+      "breakpoints": true
     }
   ]
 }
