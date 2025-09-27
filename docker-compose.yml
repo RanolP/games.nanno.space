@@ -4,12 +4,6 @@ x-app-base: &app-base
     dockerfile: Dockerfile
   container_name: games-nanno-app
   restart: unless-stopped
-  environment:
-    # Database connection for internal Docker network
-    DATABASE_URL: postgresql://postgres:postgres@postgres:5432/games_nanno_db
-    AUTH_SECRET: ${AUTH_SECRET:-please-change-this-secret-in-production}
-    AUTH_URL: ${AUTH_URL:-http://localhost:3000}
-    NEXT_PUBLIC_AUTH_URL: ${NEXT_PUBLIC_AUTH_URL:-http://localhost:3000}
   networks:
     - games-network
 
@@ -17,10 +11,6 @@ x-postgres-base: &postgres-base
   image: postgres:16-alpine
   container_name: games-nanno-postgres
   restart: unless-stopped
-  environment:
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: postgres
-    POSTGRES_DB: games_nanno_db
   volumes:
     - postgres_data:/var/lib/postgresql/data
   healthcheck:
@@ -35,18 +25,32 @@ services:
   postgres:
     <<: *postgres-base
     profiles: ["production"]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-games_nanno_db}
     expose:
       - "5432"
 
   postgres-debug:
     <<: *postgres-base
     profiles: ["debug"]
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: games_nanno_db
     ports:
       - "5432:5432"
 
   app:
     <<: *app-base
     profiles: ["production"]
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-games_nanno_db}
+      AUTH_SECRET: ${AUTH_SECRET}
+      AUTH_URL: ${AUTH_URL}
+      NEXT_PUBLIC_AUTH_URL: ${NEXT_PUBLIC_AUTH_URL}
     depends_on:
       postgres:
         condition: service_healthy
@@ -56,6 +60,15 @@ services:
   app-debug:
     <<: *app-base
     profiles: ["debug"]
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres@postgres-debug:5432/games_nanno_db
+      AUTH_SECRET: ${AUTH_SECRET:-dev-secret-please-change}
+      AUTH_URL: ${AUTH_URL:-http://localhost:3000}
+      NEXT_PUBLIC_AUTH_URL: ${NEXT_PUBLIC_AUTH_URL:-http://localhost:3000}
+      # Debug-specific settings
+      NEXT_TELEMETRY_DISABLED: "1"
+      DEBUG: "*"
     depends_on:
       postgres-debug:
         condition: service_healthy
