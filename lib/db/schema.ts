@@ -1,4 +1,10 @@
-import { pgTable, text, timestamp, varchar, primaryKey, integer, boolean } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  varchar,
+  boolean,
+} from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 export const users = pgTable("user", {
@@ -14,7 +20,9 @@ export const users = pgTable("user", {
 
 export const authorizations = pgTable("account", {
   id: text("id").primaryKey(),
-  userId: text("userId").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  userId: text("userId")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
   accountId: text("accountId").notNull(),
   providerId: text("providerId").notNull(),
   accessToken: text("accessToken"),
@@ -27,7 +35,9 @@ export const authorizations = pgTable("account", {
 
 export const sessions = pgTable("session", {
   id: text("id").primaryKey(),
-  userId: text("userId").references(() => users.id, { onDelete: "cascade" }).notNull(),
+  userId: text("userId")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
   expiresAt: timestamp("expiresAt").notNull(),
   token: text("token").unique().notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

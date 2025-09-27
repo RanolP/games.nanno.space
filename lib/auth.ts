@@ -10,21 +10,25 @@ export const auth = betterAuth({
       user: schema.users,
       session: schema.sessions,
       account: schema.authorizations,
-    }
+    },
   }),
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false
+    requireEmailVerification: false,
   },
   socialProviders: {
-    github: process.env.GITHUB_CLIENT_ID ? {
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!
-    } : undefined,
-    google: process.env.GOOGLE_CLIENT_ID ? {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!
-    } : undefined,
+    github: process.env.GITHUB_CLIENT_ID
+      ? {
+          clientId: process.env.GITHUB_CLIENT_ID,
+          clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+        }
+      : undefined,
+    google: process.env.GOOGLE_CLIENT_ID
+      ? {
+          clientId: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+        }
+      : undefined,
   },
   baseURL: process.env.AUTH_URL || "http://localhost:3000",
   secret: process.env.AUTH_SECRET || "please-change-this-secret",
@@ -39,7 +43,7 @@ export const auth = betterAuth({
         required: true,
         defaultValue: "User",
         input: true,
-      }
-    }
-  }
+      },
+    },
+  },
 });

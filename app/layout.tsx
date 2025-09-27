@@ -6,7 +6,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "GameHub - Your Random Games Collection",
-  description: "Discover and play a curated collection of random games. From puzzles to action, find your next favorite game.",
+  description:
+    "Discover and play a curated collection of random games. From puzzles to action, find your next favorite game.",
 };
 
 export default function RootLayout({

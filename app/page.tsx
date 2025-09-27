@@ -14,10 +14,16 @@ export default function HomePage() {
               </h1>
             </div>
             <div className="flex items-center gap-6">
-              <Link href="/games" className="text-gray-700 hover:text-purple-600 transition">
+              <Link
+                href="/games"
+                className="text-gray-700 hover:text-purple-600 transition"
+              >
                 Browse Games
               </Link>
-              <Link href="/categories" className="text-gray-700 hover:text-purple-600 transition">
+              <Link
+                href="/categories"
+                className="text-gray-700 hover:text-purple-600 transition"
+              >
                 Categories
               </Link>
               <UserButton />
@@ -36,8 +42,9 @@ export default function HomePage() {
             </span>
           </h2>
           <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-            Explore our curated collection of random games. From puzzle adventures to action-packed
-            challenges, find the perfect game for your mood.
+            Explore our curated collection of random games. From puzzle
+            adventures to action-packed challenges, find the perfect game for
+            your mood.
           </p>
           <div className="flex gap-4 justify-center">
             <Link
@@ -59,13 +66,31 @@ export default function HomePage() {
       {/* Featured Games */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <h3 className="text-3xl font-bold text-center mb-12">Featured Games</h3>
+          <h3 className="text-3xl font-bold text-center mb-12">
+            Featured Games
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { name: "Cosmic Puzzle", emoji: "🚀", color: "from-blue-400 to-blue-600" },
-              { name: "Word Master", emoji: "📝", color: "from-green-400 to-green-600" },
-              { name: "Number Quest", emoji: "🔢", color: "from-yellow-400 to-orange-600" },
-              { name: "Memory Match", emoji: "🧠", color: "from-purple-400 to-purple-600" },
+              {
+                name: "Cosmic Puzzle",
+                emoji: "🚀",
+                color: "from-blue-400 to-blue-600",
+              },
+              {
+                name: "Word Master",
+                emoji: "📝",
+                color: "from-green-400 to-green-600",
+              },
+              {
+                name: "Number Quest",
+                emoji: "🔢",
+                color: "from-yellow-400 to-orange-600",
+              },
+              {
+                name: "Memory Match",
+                emoji: "🧠",
+                color: "from-purple-400 to-purple-600",
+              },
             ].map((game) => (
               <div
                 key={game.name}
@@ -91,7 +116,9 @@ export default function HomePage() {
       {/* Categories Section */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4">
-          <h3 className="text-3xl font-bold text-center mb-12">Game Categories</h3>
+          <h3 className="text-3xl font-bold text-center mb-12">
+            Game Categories
+          </h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {[
               { name: "Puzzle", icon: "🧩", count: 42 },
@@ -125,7 +152,8 @@ export default function HomePage() {
               </div>
               <h4 className="text-xl font-semibold mb-2">Curated Collection</h4>
               <p className="text-gray-600">
-                Hand-picked games from various genres to ensure quality entertainment
+                Hand-picked games from various genres to ensure quality
+                entertainment
               </p>
             </div>
             <div className="text-center">
@@ -134,7 +162,8 @@ export default function HomePage() {
               </div>
               <h4 className="text-xl font-semibold mb-2">Instant Play</h4>
               <p className="text-gray-600">
-                No downloads required. Jump straight into the fun with our browser-based games
+                No downloads required. Jump straight into the fun with our
+                browser-based games
               </p>
             </div>
             <div className="text-center">
@@ -143,7 +172,8 @@ export default function HomePage() {
               </div>
               <h4 className="text-xl font-semibold mb-2">Track Progress</h4>
               <p className="text-gray-600">
-                Save your scores and achievements across all games with your account
+                Save your scores and achievements across all games with your
+                account
               </p>
             </div>
           </div>
@@ -182,30 +212,80 @@ export default function HomePage() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <h5 className="text-white font-semibold mb-4">GameHub</h5>
-              <p className="text-sm">Your destination for random games and endless fun.</p>
+              <p className="text-sm">
+                Your destination for random games and endless fun.
+              </p>
             </div>
             <div>
               <h5 className="text-white font-semibold mb-4">Games</h5>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/games" className="hover:text-white transition">All Games</Link></li>
-                <li><Link href="/games/new" className="hover:text-white transition">New Releases</Link></li>
-                <li><Link href="/games/popular" className="hover:text-white transition">Popular</Link></li>
+                <li>
+                  <Link href="/games" className="hover:text-white transition">
+                    All Games
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/games/new"
+                    className="hover:text-white transition"
+                  >
+                    New Releases
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/games/popular"
+                    className="hover:text-white transition"
+                  >
+                    Popular
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h5 className="text-white font-semibold mb-4">Community</h5>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/leaderboard" className="hover:text-white transition">Leaderboard</Link></li>
-                <li><Link href="/tournaments" className="hover:text-white transition">Tournaments</Link></li>
-                <li><Link href="/forum" className="hover:text-white transition">Forum</Link></li>
+                <li>
+                  <Link
+                    href="/leaderboard"
+                    className="hover:text-white transition"
+                  >
+                    Leaderboard
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/tournaments"
+                    className="hover:text-white transition"
+                  >
+                    Tournaments
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/forum" className="hover:text-white transition">
+                    Forum
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
               <h5 className="text-white font-semibold mb-4">Support</h5>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/help" className="hover:text-white transition">Help Center</Link></li>
-                <li><Link href="/contact" className="hover:text-white transition">Contact Us</Link></li>
-                <li><Link href="/privacy" className="hover:text-white transition">Privacy Policy</Link></li>
+                <li>
+                  <Link href="/help" className="hover:text-white transition">
+                    Help Center
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="hover:text-white transition">
+                    Contact Us
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/privacy" className="hover:text-white transition">
+                    Privacy Policy
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
